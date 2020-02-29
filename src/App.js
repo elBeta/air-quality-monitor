@@ -100,7 +100,7 @@ function Dashboard(props) {
 
   return (
     <Grid container>
-      <Grid container item xs={12} sm={10}>
+      <Grid container spacing={2} item xs={12} sm={10}>
         <Grid container direction="row-reverse" item xs={12}>
           <Grid item xs={12} sm={9}></Grid>
           <Grid item xs={12} sm={3}>

@@ -1,8 +1,19 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+
 import { Line } from "react-chartjs-2";
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: "1.5rem",
+    background: "#2A2E32",
+    borderRadius: "1.5rem"
+  }
+}));
 
 function AQIGraph(props) {
   const { aqiData, statusBrkPoints } = props;
+  const classes = useStyles();
 
   const xValues = [],
     pointColors = [];
@@ -18,39 +29,41 @@ function AQIGraph(props) {
   }
 
   return (
-    <Line
-      type="line"
-      data={{
-        datasets: [
-          {
-            label: "AQI",
-            data: aqiData,
-            pointBackgroundColor: pointColors,
-            pointRadius: 3,
-            borderColor: "#43484D",
-            borderWidth: 1
-          }
-        ],
-        labels: xValues
-      }}
-      legend={{
-        display: false
-      }}
-      options={{
-        scales: {
-          xAxes: [
+    <div className={classes.root}>
+      <Line
+        type="line"
+        data={{
+          datasets: [
             {
-              ticks: { fontColor: "#fafafa", fontSize: 14 }
+              label: "AQI",
+              data: aqiData,
+              pointBackgroundColor: pointColors,
+              pointRadius: 3,
+              borderColor: "#43484D",
+              borderWidth: 1
             }
           ],
-          yAxes: [
-            {
-              ticks: { fontColor: "#fafafa", fontSize: 14 }
-            }
-          ]
-        }
-      }}
-    />
+          labels: xValues
+        }}
+        legend={{
+          display: false
+        }}
+        options={{
+          scales: {
+            xAxes: [
+              {
+                ticks: { fontColor: "#fafafa", fontSize: 14 }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: { fontColor: "#fafafa", fontSize: 14 }
+              }
+            ]
+          }
+        }}
+      />
+    </div>
   );
 }
 
