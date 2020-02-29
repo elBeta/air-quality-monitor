@@ -11,6 +11,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
+import LiveAQI from "./LiveAQI";
+
 let theme = responsiveFontSizes(
   createMuiTheme({
     typography: {
@@ -81,7 +83,9 @@ function Dashboard(props) {
       <Grid container item xs={12} sm={10}>
         <Grid container direction="row-reverse" item xs={12}>
           <Grid item xs={12} sm={9}></Grid>
-          <Grid item xs={12} sm={3}></Grid>
+          <Grid item xs={12} sm={3}>
+            <LiveAQI aqiMin={70} aqiMax={90} aqiVal={74} status={0} />
+          </Grid>
         </Grid>
         <Grid container direction="row-reverse" item xs={12}>
           <Grid item xs={12} sm={4}></Grid>
