@@ -3,13 +3,17 @@ import React, { useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 
 function LiveAQI(props) {
-  const { aqiVal, aqiMax, aqiMin, status } = props;
+  const { aqiVal, aqiMax, aqiMin, statusBrkPoints } = props;
 
   useEffect(() => {});
 
   const dataValue = ((aqiVal - aqiMin) / (aqiMax - aqiMin)) * 100;
   const dataBgColor =
-    status === 2 ? "#FD413C" : status === 1 ? "#FEBC2C" : "#5CDB95";
+    aqiVal >= statusBrkPoints[1]
+      ? "#FD413C"
+      : aqiVal >= statusBrkPoints[0]
+      ? "#FEBC2C"
+      : "#5CDB95";
 
   return (
     <Doughnut
