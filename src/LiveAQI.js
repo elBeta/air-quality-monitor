@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 
 import { Doughnut } from "react-chartjs-2";
 
@@ -8,6 +10,14 @@ const useStyles = makeStyles(theme => ({
     padding: "1.5rem",
     background: "#2A2E32",
     borderRadius: "1.5rem"
+  },
+  titleTypoHolder: {
+    paddingBottom: "1rem"
+  },
+  titleTypo: {
+    fontFamily: "Roboto",
+    fontWeight: 500,
+    color: "#fafafa"
   }
 }));
 
@@ -25,45 +35,57 @@ function LiveAQI(props) {
 
   return (
     <div className={classes.root}>
-      <Doughnut
-        data={{
-          datasets: [
-            {
-              backgroundColor: [dataBgColor, "#303439"],
-              borderWidth: 0,
-              data: [dataValue, 100 - dataValue]
-            }
-          ],
-          labels: [`AQI: ${aqiVal}`, ""]
-        }}
-        options={{
-          cutoutPercentage: 70,
-          rotation: 0.75 * Math.PI,
-          circumference: 1.5 * Math.PI,
-          legend: {
-            position: "bottom",
-            labels: {
-              fontSize: 18,
-              fontFamily: "Barlow",
-              fontStyle: "bold",
-              fontColor: "#fafafa",
-              filter: (legendItem, data) => legendItem.index === 0
-            }
-          },
-          tooltips: {
-            callbacks: {
-              label: (toolTipItem, data) => {
-                return toolTipItem.datasetIndex === 0 ? aqiVal : null;
+      <Grid container>
+        <Grid container item xs={12}>
+          <Grid item className={classes.titleTypoHolder}>
+            <Typography variant="h4" className={classes.titleTypo}>
+              Live AQI
+            </Typography>
+          </Grid>
+          <Grid item></Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Doughnut
+            data={{
+              datasets: [
+                {
+                  backgroundColor: [dataBgColor, "#303439"],
+                  borderWidth: 0,
+                  data: [dataValue, 100 - dataValue]
+                }
+              ],
+              labels: [`AQI: ${aqiVal}`, ""]
+            }}
+            options={{
+              cutoutPercentage: 70,
+              rotation: 0.75 * Math.PI,
+              circumference: 1.5 * Math.PI,
+              legend: {
+                position: "bottom",
+                labels: {
+                  fontSize: 18,
+                  fontFamily: "Barlow",
+                  fontStyle: "bold",
+                  fontColor: "#fafafa",
+                  filter: (legendItem, data) => legendItem.index === 0
+                }
               },
-              labelColor: (toolTipItem, chart) => {
-                return {
-                  backgroundColor: chart.data.datasets[0].backgroundColor[0]
-                };
+              tooltips: {
+                callbacks: {
+                  label: (toolTipItem, data) => {
+                    return toolTipItem.datasetIndex === 0 ? aqiVal : null;
+                  },
+                  labelColor: (toolTipItem, chart) => {
+                    return {
+                      backgroundColor: chart.data.datasets[0].backgroundColor[0]
+                    };
+                  }
+                }
               }
-            }
-          }
-        }}
-      />
+            }}
+          />
+        </Grid>
+      </Grid>
     </div>
   );
 }
