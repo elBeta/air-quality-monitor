@@ -54,7 +54,7 @@ function App() {
   const [aqiData, setAQIData] = useState([]);
   const [forecastValues, setForecastValues] = useState({});
   const [statusBrkPoints, setStatusBrkPoints] = useState([30, 45]);
-  const [aqiMinMax, setAQIMinMax] = useState([70, 90]);
+  const [aqiMinMax, setAQIMinMax] = useState([30, 90]);
 
   // const getRandomInt = (min, max) => {
   //   // The maximum is exclusive and the minimum is inclusive
@@ -147,7 +147,7 @@ function Dashboard(props) {
         <Grid container direction="row-reverse" spacing={2} item xs={12}>
           <Grid item xs={12} sm={4}>
             <AQIForecast
-              aqiValues={forecastValues}
+              forecastValues={forecastValues}
               statusBrkPoints={statusBrkPoints}
             />
           </Grid>

@@ -24,8 +24,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+function useWidth() {
+  const theme = useTheme();
+  const keys = [...theme.breakpoints.keys].reverse();
+  return (
+    keys.reduce((output, key) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const matches = useMediaQuery(theme.breakpoints.up(key));
+      return !output && matches ? key : output;
+    }, null) || "xs"
+  );
+}
+
 function AQIForecast(props) {
-  const { aqiValues, statusBrkPoints } = props;
+  const { forecastValues, statusBrkPoints } = props;
   const classes = useStyles({ statusBrkPoints });
 
   return (
@@ -41,7 +53,7 @@ function AQIForecast(props) {
         </Grid>
         <Grid item xs={12}>
           <ForecastResults
-            aqiValues={aqiValues}
+            forecastValues={forecastValues}
             statusBrkPoints={statusBrkPoints}
             classes={classes}
           />
@@ -51,24 +63,13 @@ function AQIForecast(props) {
   );
 }
 
-function useWidth() {
-  const theme = useTheme();
-  const keys = [...theme.breakpoints.keys].reverse();
-  return (
-    keys.reduce((output, key) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const matches = useMediaQuery(theme.breakpoints.up(key));
-      return !output && matches ? key : output;
-    }, null) || "xs"
-  );
-}
-
 function ForecastResults(props) {
-  const { aqiValues, statusBrkPoints, classes } = props;
+  const { forecastValues, statusBrkPoints, classes } = props;
   const [curPage, setCurPage] = useState(0);
   const mobileMode = useWidth() === "xs";
   const [itemsPerPage, setItemsPerPage] = useState(mobileMode ? 3 : 2);
-  const lastPage = Math.ceil(aqiValues.length / itemsPerPage) - 1;
+  const lastPage =
+    Math.ceil(Object.keys(forecastValues).length / itemsPerPage) - 1;
   console.log(lastPage);
 
   useEffect(() => {
@@ -90,11 +91,16 @@ function ForecastResults(props) {
   const displayItems = [];
 
   for (let i = 0; i < itemsPerPage; i++) {
-    if (curPage * itemsPerPage + i < aqiValues.length) {
+    if (curPage * itemsPerPage + i < Object.keys(forecastValues).length) {
       displayItems.push(
         <Grid item xs={4} sm={6}>
           <DisplayItem
-            aqiVal={aqiValues[curPage * itemsPerPage + i]}
+            aqiKey={Object.keys(forecastValues)[curPage * itemsPerPage + i]}
+            aqiVal={
+              forecastValues[
+                Object.keys(forecastValues)[curPage * itemsPerPage + i]
+              ]
+            }
             statusBrkPoints={statusBrkPoints}
             classes={classes}
           />
@@ -123,7 +129,7 @@ function ForecastResults(props) {
 }
 
 function DisplayItem(props) {
-  const { aqiVal, statusBrkPoints, classes } = props;
+  const { aqiKey, aqiVal, statusBrkPoints, classes } = props;
 
   const aqiTypoColor =
     aqiVal >= statusBrkPoints[1]
@@ -141,7 +147,7 @@ function DisplayItem(props) {
       </Grid>
       <Grid item xs={12}>
         <Typography variant="h5" style={{ color: "#fafafa" }}>
-          AQI
+          {aqiKey}
         </Typography>
       </Grid>
     </Grid>
