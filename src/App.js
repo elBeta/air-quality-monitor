@@ -53,8 +53,9 @@ function App() {
   const classes = useStyles();
   const [aqiData, setAQIData] = useState([]);
   const [forecastValues, setForecastValues] = useState({});
-  const [statusBrkPoints, setStatusBrkPoints] = useState([30, 45]);
+  const [statusBrkPoints, setStatusBrkPoints] = useState([90, 120]);
   const [aqiMinMax, setAQIMinMax] = useState([30, 90]);
+  const [alertList, setAlertList] = useState([]);
 
   // const getRandomInt = (min, max) => {
   //   // The maximum is exclusive and the minimum is inclusive
@@ -84,11 +85,22 @@ function App() {
     let inc_data = JSON.parse(incData);
     console.log(`Recieved Incoming data`);
     console.log(inc_data);
-    // setAQIData(aqiData.concat(parseFloat(inc_data["aqi"])));
-    setAQIData(aqiData.concat(1));
+    const aqiVal = parseInt(inc_data["aqi"]);
+
+    setAQIData(aqiData.concat(aqiVal));
+    // setAQIData(aqiData.concat(1));
     console.log(aqiData);
 
-    setForecastValues(inc_data["aqi_forecast"]);
+    setForecastValues(JSON.parse(inc_data["aqi_forecast"]));
+
+    if (aqiVal > statusBrkPoints[1]) {
+      setAlertList(
+        alertList.concat({
+          displayed: true,
+          aqi: aqiVal
+        })
+      );
+    }
   };
 
   socket.on("data", handleDataRecieve);

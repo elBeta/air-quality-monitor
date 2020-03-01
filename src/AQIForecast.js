@@ -142,7 +142,7 @@ function DisplayItem(props) {
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h4" style={{ color: aqiTypoColor }}>
-          {aqiVal}
+          {parseInt(aqiVal)}
         </Typography>
       </Grid>
       <Grid item xs={12}>
