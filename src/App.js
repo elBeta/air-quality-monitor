@@ -53,7 +53,7 @@ function App() {
   const classes = useStyles();
   const [aqiData, setAQIData] = useState([]);
   const [forecastValues, setForecastValues] = useState({});
-  const [statusBrkPoints, setStatusBrkPoints] = useState([76, 84]);
+  const [statusBrkPoints, setStatusBrkPoints] = useState([30, 45]);
   const [aqiMinMax, setAQIMinMax] = useState([70, 90]);
 
   // const getRandomInt = (min, max) => {
@@ -82,8 +82,11 @@ function App() {
 
   const handleDataRecieve = incData => {
     let inc_data = JSON.parse(incData);
-    console.log(`Recieved Incoming data: ${inc_data["aqi"]}`);
-    setAQIData(aqiData.concat(parseFloat(inc_data["aqi"])));
+    console.log(`Recieved Incoming data`);
+    console.log(inc_data);
+    // setAQIData(aqiData.concat(parseFloat(inc_data["aqi"])));
+    setAQIData(aqiData.concat(1));
+    console.log(aqiData);
 
     setForecastValues(inc_data["aqi_forecast"]);
   };
