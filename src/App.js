@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 
 import LiveAQI from "./LiveAQI";
 import AQIGraph from "./AQIGraph";
+import AQIForecast from "./AQIForecast";
 
 let theme = responsiveFontSizes(
   createMuiTheme({
@@ -112,8 +113,10 @@ function Dashboard(props) {
             />
           </Grid>
         </Grid>
-        <Grid container direction="row-reverse" item xs={12}>
-          <Grid item xs={12} sm={4}></Grid>
+        <Grid container direction="row-reverse" spacing={2} item xs={12}>
+          <Grid item xs={12} sm={4}>
+            <AQIForecast aqiValues={[75, 80, 86]} statusBrkPoints={[76, 84]} />
+          </Grid>
           <Grid item xs={12} sm={8}>
             <AQIGraph aqiData={aqiData} statusBrkPoints={[76, 84]} />
           </Grid>
