@@ -11,6 +11,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
+import useSocket from "use-socket.io-client";
+
 import LiveAQI from "./LiveAQI";
 import AQIGraph from "./AQIGraph";
 import AQIForecast from "./AQIForecast";
@@ -49,6 +51,44 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
+  const [aqiData, setAQIData] = useState([]);
+  const [forecastValues, setForecastValues] = useState({});
+  const [statusBrkPoints, setStatusBrkPoints] = useState([76, 84]);
+  const [aqiMinMax, setAQIMinMax] = useState([70, 90]);
+
+  // const getRandomInt = (min, max) => {
+  //   // The maximum is exclusive and the minimum is inclusive
+  //   min = Math.ceil(min);
+  //   max = Math.floor(max);
+  //   return Math.floor(Math.random() * (max - min)) + min;
+  // };
+
+  // const genRandomAQI = () => {
+  //   const randAQI = getRandomInt(70, 90);
+  //   setAQIData(aqiData.concat(randAQI));
+  // };
+
+  // useEffect(() => {
+  //   const timer = setInterval(genRandomAQI, 1000);
+  //   return () => clearInterval(timer);
+  // }, []);
+
+  const [socket] = useSocket("192.168.43.60:1400", {
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
+    reconnectionAttempts: Infinity
+  });
+
+  const handleDataRecieve = incData => {
+    let inc_data = JSON.parse(incData);
+    console.log(`Recieved Incoming data: ${inc_data["aqi"]}`);
+    setAQIData(aqiData.concat(parseFloat(inc_data["aqi"])));
+
+    setForecastValues(inc_data["aqi_forecast"]);
+  };
+
+  socket.on("data", handleDataRecieve);
 
   return (
     <>
@@ -70,7 +110,12 @@ function App() {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Dashboard />
+              <Dashboard
+                aqiData={aqiData}
+                statusBrkPoints={statusBrkPoints}
+                forecastValues={forecastValues}
+                aqiMinMax={aqiMinMax}
+              />
             </Grid>
           </Grid>
         </div>
@@ -80,24 +125,7 @@ function App() {
 }
 
 function Dashboard(props) {
-  const [aqiData, setAQIData] = useState([76, 75, 74]);
-
-  const getRandomInt = (min, max) => {
-    // The maximum is exclusive and the minimum is inclusive
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
-
-  const genRandomAQI = () => {
-    const randAQI = getRandomInt(70, 90);
-    setAQIData(aqiData.concat(randAQI));
-  };
-
-  useEffect(() => {
-    const timer = setInterval(genRandomAQI, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const { aqiData, statusBrkPoints, forecastValues, aqiMinMax } = props;
 
   return (
     <Grid container>
@@ -106,19 +134,22 @@ function Dashboard(props) {
           <Grid item xs={12} sm={9}></Grid>
           <Grid item xs={12} sm={3}>
             <LiveAQI
-              aqiMin={70}
-              aqiMax={90}
+              aqiMin={aqiMinMax[0]}
+              aqiMax={aqiMinMax[1]}
               aqiVal={aqiData[aqiData.length - 1]}
-              statusBrkPoints={[76, 84]}
+              statusBrkPoints={statusBrkPoints}
             />
           </Grid>
         </Grid>
         <Grid container direction="row-reverse" spacing={2} item xs={12}>
           <Grid item xs={12} sm={4}>
-            <AQIForecast aqiValues={[75, 80, 86]} statusBrkPoints={[76, 84]} />
+            <AQIForecast
+              aqiValues={forecastValues}
+              statusBrkPoints={statusBrkPoints}
+            />
           </Grid>
           <Grid item xs={12} sm={8}>
-            <AQIGraph aqiData={aqiData} statusBrkPoints={[76, 84]} />
+            <AQIGraph aqiData={aqiData} statusBrkPoints={statusBrkPoints} />
           </Grid>
         </Grid>
       </Grid>
