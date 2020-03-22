@@ -34,7 +34,7 @@ function LiveAQI(props) {
       : "#5CDB95";
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ height: "100%" }}>
       <Grid container>
         <Grid container item xs={12}>
           <Grid item className={classes.titleTypoHolder}>

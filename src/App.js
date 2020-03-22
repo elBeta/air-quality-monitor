@@ -87,7 +87,8 @@ const useStyles = makeStyles(theme => ({
   },
   dashboardTitleTypo: {
     color: "#fafafa",
-    fontWeight: 700
+    fontWeight: 700,
+    padding: "1rem 0"
   },
   offset: theme.mixins.toolbar
 }));
@@ -132,8 +133,8 @@ function App() {
 
     // setAQIData(aqiData.concat(aqiVal));
     aqiData.push(aqiVal);
-    if (aqiData.length > 8) {
-      aqiData.unshift();
+    if (aqiData.length > 12) {
+      aqiData.shift();
     }
     // setAQIData(aqiData.concat(1));
     console.log(aqiData);
@@ -207,9 +208,10 @@ function Dashboard(props) {
     <Grid container>
       <Grid container spacing={2} item xs={12} sm={10}>
         <Grid container spacing={2} direction="row-reverse" item xs={12}>
-          <Grid item xs={12} sm={9}>
+          <Grid item xs={12} sm={7}>
             <div style={{ width: "100%" }}>
               <MaterialTable
+                // style={{ borderRadius: "1.5rem", borderColor: "#212529" }}
                 columns={[
                   { title: "AQI", field: "aqi" },
                   { title: "Warning Level", field: "level" }
@@ -220,7 +222,7 @@ function Dashboard(props) {
               />
             </div>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={5}>
             <LiveAQI
               aqiMin={aqiMinMax[0]}
               aqiMax={aqiMinMax[1]}
